@@ -24,12 +24,12 @@ jobs:
     - name: Extract Folder Names
       id: extract
       run: |
-        FOLDER_NAMES=$(find list-bucket/* -maxdepth 0 -type d -exec basename {} \;)
+        FOLDER_NAMES=$(find list-bucket/* -maxdepth 0 -type d -exec basename {} \; | tr '\n' ' ')
         echo "FOLDER_NAMES=${FOLDER_NAMES}" >> $GITHUB_ENV
 
     - name: Create S3 Buckets
       run: |
-        IFS=$'\n' # Set Internal Field Separator (IFS) to newline
-        for BUCKET_NAME in ${{ env.FOLDER_NAMES }}; do
-          aws s3api create-bucket --bucket $BUCKET_NAME --region your-region
+        IFS=' ' # Set Internal Field Separator (IFS) to space
+        for BUCKET_NAME in $FOLDER_NAMES; do
+          aws s3api create-bucket --bucket $BUCKET_NAME --region ap-southeast-1
         done
