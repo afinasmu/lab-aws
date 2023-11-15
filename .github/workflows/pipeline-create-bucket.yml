@@ -3,6 +3,7 @@ name: Dynamic S3 Bucket Deployment
 on:
   push:
     paths:
+      - '.github/workflows/pipeline-create-bucket.yml'
       - 'list-bucket/**'
 
 jobs:
@@ -24,7 +25,7 @@ jobs:
       id: extract
       run: |
         FOLDER_NAMES=$(find list-bucket/* -maxdepth 0 -type d -exec basename {} \;)
-        echo "${FOLDER_NAMES}" >> $GITHUB_ENV
+        echo "FOLDER_NAMES=${FOLDER_NAMES}" >> $GITHUB_ENV
 
     - name: Create S3 Buckets
       run: |
